@@ -24,7 +24,7 @@
         </div>
         <div class="form__item form__item--wide <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">
             <label for="message">Описание <sup>*</sup></label>
-            <textarea id="message" name="message" placeholder="Напишите описание лота">1<?= $lot['message']; ?>2</textarea>
+            <textarea id="message" name="message" placeholder="Напишите описание лота"><?= $lot['message']; ?></textarea>
             <span class="form__error">Напишите описание лота</span>
         </div>
         <div class="form__item form__item--file <?= isset($errors["lot_img"]) ? "form__item--invalid" : ""; ?>">

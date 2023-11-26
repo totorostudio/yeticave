@@ -98,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     } else {
         $sql = get_query_create_lot(2);
+        /** @var mysqli_stmt $stmt */
         $stmt = db_get_prepare_stmt_version($con, $sql, $lot);
         $res = mysqli_stmt_execute($stmt);
 
