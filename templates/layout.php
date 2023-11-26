@@ -46,7 +46,7 @@
 </div>
 
 <footer class="main-footer">
-    <? include 'menu.php' ?>;
+    <?php include 'menu.php'; ?>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
             <p>© 2023, YetiCave2023</p>
@@ -89,7 +89,7 @@
     </div>
 </footer>
 
-<script src="flatpickr.js"></script>
+<!--<script src="flatpickr.js"></script>-->
 <script src="script.js"></script>
 </body>
 </html>

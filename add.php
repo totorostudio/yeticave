@@ -5,8 +5,11 @@ require_once("data.php");
 require_once("init.php");
 require_once("models.php");
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $categories = get_categories($con);
-$categories_id = array_column($categories, "id");
+$categories_id = is_array($categories) ? array_column($categories, "id") : [];
 
 $lot = [
     'lot-name' => '',
