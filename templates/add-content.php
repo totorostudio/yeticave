@@ -1,15 +1,5 @@
 <main>
     <? include 'menu.php' ?>
-    <?php
-        $uploadDir = 'uploads/';
-        if (!is_dir($uploadDir)) {
-            echo("Директория $uploadDir не существует.");
-        } else if (!is_writable($uploadDir)) {
-            echo("Директория $uploadDir недоступна для записи.");
-        } else {
-            echo("ok");
-        }
-    ?>
     <?php $classname = isset($errors) ? "form--invalid" : ""; ?>
     <form class="form form--add-lot container <?= $classname; ?>" action="add.php" method="post" enctype="multipart/form-data">
         <h2>Добавление лота</h2>

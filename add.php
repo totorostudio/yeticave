@@ -23,9 +23,6 @@ $page_content = include_template("add-content.php", [
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "<pre>";
-    var_dump($_FILES);
-    echo "</pre>";
     $required = ["lot-name", "category", "message", "lot-rate", "lot-step", "lot-date"];
     $errors = [];
 
