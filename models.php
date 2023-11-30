@@ -4,11 +4,11 @@
  * @param string $date Дата в виде строки, в формате 'YYYY-MM-DD'
  * @return string SQL-запрос
  */
-function get_query_list_lots($date)
+function get_query_list_lots()
 {
     return "SELECT lots.id, lots.title, lots.start_price, lots.img, lots.date_finish, categories.name_category FROM lots
     JOIN categories ON lots.category_id=categories.id
-    WHERE date_creation > $date ORDER BY date_creation DESC";
+    WHERE date_finish > NOW() ORDER BY date_finish ASC";
 }
 
 /**
@@ -17,7 +17,7 @@ function get_query_list_lots($date)
  * @return string SQL-запрос
  */
 function get_query_lot ($id_lot) {
-    return "SELECT lots.title, lots.user_id, lots.start_price, lots.img, lots.date_finish, lots.lot_description, categories.name_category FROM lots
+    return "SELECT lots.title, lots.user_id, lots.step, lots.start_price, lots.img, lots.date_finish, lots.lot_description, categories.name_category FROM lots
     JOIN categories ON lots.category_id=categories.id
     WHERE lots.id=$id_lot;";
 }
@@ -95,7 +95,8 @@ function get_lots_in_category($con, $category_id, $limit, $offset) {
             SELECT lots.*, categories.name_category 
             FROM lots 
             LEFT JOIN categories ON lots.category_id = categories.id 
-            WHERE lots.category_id = ? 
+            WHERE lots.category_id = ?
+            ORDER BY date_finish DESC
             LIMIT ? OFFSET ?
         ";
         $stmt = mysqli_prepare($con, $sql);
@@ -186,7 +187,7 @@ function get_found_lots($link, $words, $limit, $offset) {
         $goods = get_arrow($res);
         return $goods;
     }
-    $error = mysqli_error($con);
+    $error = mysqli_error($link);
     return $error;
 }
 
@@ -209,7 +210,7 @@ function get_count_lots($link, $words) {
         $count = mysqli_fetch_assoc($res)["cnt"];
         return $count;
     }
-    $error = mysqli_error($con);
+    $error = mysqli_error($link);
     return $error;
 }
 
@@ -229,7 +230,7 @@ function add_bet_database($link, $sum, $user_id, $lot_id) {
     if ($res) {
         return $res;
     }
-    $error = mysqli_error($con);
+    $error = mysqli_error($link);
     return $error;
 }
 

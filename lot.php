@@ -21,13 +21,12 @@ if (!$con) {
 
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
-if ($id) {
-    $sql = get_query_lot ($id);
-} else {
+if (!$id || !ctype_digit($id)) {
     http_response_code(404);
-    die();
+    exit();
 }
 
+$sql = get_query_lot ($id);
 $res = mysqli_query($con, $sql);
 
 if ($res) {
@@ -47,6 +46,7 @@ if (!empty($history)) {
 } else {
     $current_price = $lot["start_price"];
 }
+
 $min_bet = $current_price + ($lot["step"] ?? 0);
 
 $page_content = include_template("lot.tpl.php", [

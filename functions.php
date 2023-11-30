@@ -9,20 +9,35 @@ return $price ." " ."₽";
 
 function get_time_left($date) {
     date_default_timezone_set('Europe/Moscow');
-    $final_date = date_create($date);
-    $cur_date = date_create("now");
-    $diff = date_diff($final_date, $cur_date);
-    $format_diff = date_interval_format($diff, "%d %H %I");
-    $arr = explode(" ", $format_diff);
+    $final_date = strtotime($date . ' 23:59:59');
+    $now = time();
 
-    $hours = $arr[0] * 24 + $arr[1];
-    $minutes = intval($arr[2]);
-    $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
-    $minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
-    $res[] = $hours;
-    $res[] = $minutes;
+    if ($now >= $final_date) {
+        return "00:00";
+    }
 
-    return $res;
+    $interval = $final_date - $now;
+    $hours = floor($interval / (60 * 60));
+    $minutes = floor(($interval % (60 * 60)) / 60);
+
+    if ($hours >= 24) {
+        $days = floor($hours / 24);
+        $hours %= 24;
+        $formatted_time = sprintf('%02d:%02d', $hours, $minutes);
+
+        if ($days === 1) {
+            return "1 день " . $formatted_time;
+        } elseif ($days % 10 === 1 && $days !== 11) {
+            return $days . " день " . $formatted_time;
+        } elseif (($days % 10 >= 2 && $days % 10 <= 4) && ($days < 10 || $days > 20)) {
+            return $days . " дня " . $formatted_time;
+        } else {
+            return $days . " дней " . $formatted_time;
+        }
+    }
+
+    $formatted_time = sprintf('%02d:%02d', $hours, $minutes);
+    return $formatted_time;
 }
 
 /**
@@ -164,4 +179,12 @@ function validate_length ($value, $min, $max) {
             return "Значение должно быть от $min до $max символов";
         }
     }
+}
+
+function isExpired($date_finish) {
+    $current_time = time(); // Текущая метка времени (timestamp)
+    $lot_finish_time = strtotime($date_finish); // Преобразование строки даты в timestamp
+
+    // Если дата завершения меньше текущей даты, возвращаем true
+    return $lot_finish_time < $current_time;
 }

@@ -14,7 +14,7 @@
                 <div class="lot-item__state">
                     <?php $res = get_time_left($lot["date_finish"]) ?>
                     <div class="lot-item__timer timer <?php if ($res[0] < 1): ?>timer--finishing<?php endif; ?>">
-                        <?= "$res[0] : $res[1]"; ?>
+                        <?= $res; ?>
                     </div>
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
@@ -27,16 +27,22 @@
                     </div>
                     <form class="lot-item__form" action="lot.php?id=<?= $id;?>" method="post" autocomplete="off">
                         <p class="lot-item__form-item form__item form__item--invalid">
-                            <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" <?php if (!$is_auth || $lot["user_id"] === $_SESSION["id"] || $history[0]["user_name"] !== $_SESSION["name"]): ?>disabled<?php endif; ?>>
+                            <?php if (isExpired($lot["date_finish"])): ?>
+                                <label for="cost">Аукцион завершен</label>
+                            <?php elseif ($is_auth): ?>
+                                <label for="cost">Ваша ставка</label>
+                            <?php else: ?>
+                                <label for="cost">Войдите, чтобы сделать ставку</label>
+                            <?php endif; ?>
+                            <input id="cost" type="text" name="cost" <?php if (!$is_auth || !isset($_SESSION["id"]) || $lot["user_id"] === $_SESSION["id"] || isExpired($lot["date_finish"])): ?>disabled<?php endif; ?>>
                             <span class="form__error"><?= $error; ?></span>
                         </p>       
-                        <button type="submit" class="button" <?php if (!$is_auth || $lot["user_id"] === $_SESSION["id"] || $history[0]["user_name"] !== $_SESSION["name"]): ?>disabled<?php endif; ?>>Сделать&nbsp;ставку</button>
+                        <button type="submit" class="button" <?php if (!$is_auth || $lot["user_id"] === $_SESSION["id"] || isExpired($lot["date_finish"])): ?>disabled<?php endif; ?>>Сделать&nbsp;ставку</button>
                     </form>
                 </div>
                 <?php if (!empty($history)): ?>
                 <div class="history">
-                    <h3>История ставок (<span>10</span>)</h3>
+                    <h3>История ставок (<span><?= count($history) ?></span>)</h3>
                     <table class="history__list">
                         <?php foreach($history as $bet): ?>
                         <tr class="history__item">

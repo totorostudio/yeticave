@@ -32,7 +32,7 @@
                             </div>
                             <?php $res = get_time_left(htmlspecialchars($good["date_finish"])) ?>
                             <div class="lot__timer timer <?php if ($res[0] < 1) : ?>timer--finishing<?php endif; ?>">
-                                <?= "$res[0] : $res[1]"; ?>
+                                <?= $res; ?>
                             </div>
                         </div>
                     </div>

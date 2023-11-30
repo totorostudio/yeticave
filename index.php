@@ -19,7 +19,7 @@ if (!$con) {
     }
 }
 
-$sql = get_query_list_lots('2025-07-01');
+$sql = get_query_list_lots();
 
 $res = mysqli_query($con, $sql);
 if ($res) {
