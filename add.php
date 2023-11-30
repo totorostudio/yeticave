@@ -5,6 +5,13 @@ require_once("data.php");
 require_once("init.php");
 require_once("models.php");
 
+session_start();
+
+if (!$is_auth) {
+    header("Location: /login.php");
+    exit();
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -20,7 +27,7 @@ $lot = [
     'lot-date' => ''
 ];
 
-$page_content = include_template("add-content.php", [
+$page_content = include_template("add.tpl.php", [
     "categories" => $categories,
     "lot" => $lot
 ]);
@@ -66,8 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = array_filter($errors);
     
-    if (!empty($_FILES["lot_img"]["name"])) {
-        $tmp_name = $_FILES["lot_img"]["tmp_name"];
+    var_dump($_FILES);
+    if (!empty($_FILES["lot-img"]["name"])) {
+        $tmp_name = $_FILES["lot-img"]["tmp_name"];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
         finfo_close($finfo);
@@ -83,15 +91,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $filename = uniqid() . $ext;
             $lot["path"] = "uploads/".$filename;
             move_uploaded_file($tmp_name, $lot["path"]);
+
+            $file_info = pathinfo($lot["path"]);
+            $filename_without_path = $file_info['basename'];
+            $lot["path"] = $filename_without_path;
         } else {
-            $errors["lot_img"] = "Допустимые форматы файлов: jpg, jpeg, png";
+            $errors["lot-img"] = "Допустимые форматы файлов: jpg, jpeg, png";
         }
     } else {
-        $errors["lot_img"] = "Вы не загрузили изображение";
+        $errors["lot-img"] = "Вы не загрузили изображение";
     }
 
     if (count($errors)) {
-        $page_content = include_template("add-content.php", [
+        $page_content = include_template("add.tpl.php", [
             "categories" => $categories,
             "lot" => $lot,
             "errors" => $errors
@@ -112,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$layout_content = include_template("layout.php", [
+$layout_content = include_template("layout.tpl.php", [
     "content" => $page_content,
     "categories" => $categories,
     "title" => "Добавить лот",

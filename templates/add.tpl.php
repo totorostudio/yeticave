@@ -1,5 +1,5 @@
 <main>
-    <?php include 'menu.php'; ?>
+    <?php include 'menu.tpl.php'; ?>
     <?php $classname = isset($errors) ? "form--invalid" : ""; ?>
     <form class="form form--add-lot container <?= $classname; ?>" action="add.php" method="post" enctype="multipart/form-data">
         <h2>Добавление лота</h2>
@@ -27,7 +27,7 @@
             <textarea id="message" name="message" placeholder="Напишите описание лота"><?= $lot['message']; ?></textarea>
             <span class="form__error">Напишите описание лота</span>
         </div>
-        <div class="form__item form__item--file <?= isset($errors["lot_img"]) ? "form__item--invalid" : ""; ?>">
+        <div class="form__item form__item--file <?= isset($errors["lot-img"]) ? "form__item--invalid" : ""; ?>">
             <label>Изображение <sup>*</sup></label>
             <div class="form__input-file">
                 <input class="visually-hidden" type="file" id="lot-img" name="lot-img">
@@ -35,7 +35,7 @@
                     Добавить
                 </label>
             </div>
-            <span class="form__error"><?= $errors["lot_img"] ?? ''; ?></span>
+            <span class="form__error"><?= $errors["lot-img"] ?? ''; ?></span>
             <?php if(isset($_FILES['lot-img']['name'])): ?>
                 <p>Выбранный файл: <?= $_FILES['lot-img']['name']; ?></p>
             <?php endif; ?>

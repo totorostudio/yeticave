@@ -5,10 +5,12 @@ require_once("data.php");
 require_once("init.php");
 require_once("models.php");
 
+session_start();
+
 if (!$con) {
     $error = mysqli_connect_error();
 } else {
-    $sql = "SELECT character_code, name_category FROM categories";
+    $sql = "SELECT id, character_code, name_category FROM categories";
     $result = mysqli_query($con, $sql);
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -26,12 +28,17 @@ if ($res) {
     $error = mysqli_error($con);
 }
 
-$page_content = include_template("main-content.php", [
+$page_content = include_template("main.tpl.php", [
     "categories" => $categories,
     "goods" => $goods
 ]);
 
-$layout_content = include_template("layout.php", [
+if (empty($page_content)) {
+    http_response_code(404);
+    $page_content = include_template("404.tpl.php", []);
+}
+
+$layout_content = include_template("layout.tpl.php", [
     "content" => $page_content,
     "categories" => $categories,
     "title" => "Главная",

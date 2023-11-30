@@ -81,6 +81,8 @@ function db_get_prepare_stmt_version($link, $sql, $data = []) {
  */
 function get_arrow ($result_query) {
     $row = mysqli_num_rows($result_query);
+    $arrow = [];
+    
     if ($row === 1) {
         $arrow = mysqli_fetch_assoc($result_query);
     } else if ($row > 1) {
@@ -136,3 +138,30 @@ function validate_date ($date) {
         return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
     }
 };
+
+/**
+ * Проверяет что содержимое поля является корректным адресом электронной почты
+ * @param string $email адрес электронной почты
+ * @return string Текст сообщения об ошибке
+ */
+function validate_email ($email) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return "E-mail должен быть корректным";
+    }
+}
+
+/**
+ * Проверяет что содержимое поля укладывается в допустимый диапазон
+ * @param string $value содержимое поля
+ * @param int $min минимальное количество символов
+ * @param int $max максимальное количество символов
+ * @return string Текст сообщения об ошибке
+ */
+function validate_length ($value, $min, $max) {
+    if ($value) {
+        $len = strlen($value);
+        if ($len < $min or $len > $max) {
+            return "Значение должно быть от $min до $max символов";
+        }
+    }
+}

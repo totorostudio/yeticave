@@ -43,3 +43,4 @@ CREATE TABLE yeticave.bets (
                                FOREIGN KEY (user_id) REFERENCES users(id),
                                FOREIGN KEY (lot_id) REFERENCES lots(id)
 );
+ALTER TABLE lots ADD FULLTEXT (title, lot_description);
